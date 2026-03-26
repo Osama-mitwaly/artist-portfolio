@@ -2,26 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Cairo', sans-serif;
+  background-color: #F5F1E8; /* لون الورق الدافئ */
+  color: #2C1810; /* لون الحبر */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* تأثير الفرشاة للعناوين */
+.title-brush {
+  position: relative;
+  display: inline-block;
+}
+
+.title-brush::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: rgba(197, 160, 89, 0.3); /* لون ذهبي شفاف */
+  border-radius: 4px;
+  z-index: -1;
+  transform: rotate(-1deg);
+}
+
+/* تخصيص شريط التمرير */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F1E8;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5A059;
+  border-radius: 4px;
 }

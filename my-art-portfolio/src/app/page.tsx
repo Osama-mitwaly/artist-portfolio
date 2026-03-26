@@ -1,101 +1,58 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { useSettings } from "@/context/SettingsContext";
+import { usePaintings } from "@/hooks/usePaintings";
+import PaintingCard from "@/components/PaintingCard";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { settings } = useSettings();
+  const { paintings } = usePaintings();
+  
+  const featuredPaintings = paintings.filter(p => p.isFeatured).slice(0, 3);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-[80vh] flex items-center justify-center text-center bg-gradient-to-b from-paper to-white overflow-hidden">
+        <div className="absolute top-10 right-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-sienna/10 rounded-full blur-3xl"></div>
+
+        <div className="relative z-10 max-w-3xl mx-auto px-6 animate-fade-in">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-ink">
+            <span className="title-brush">{settings.artistName}</span>
+          </h1>
+          <p className="text-xl text-ink/70 mb-8 leading-relaxed">
+            أرسم بالألوان الزيتية لأعبر عن صوت الروح. استكشف معرضي من اللوحات الفريدة التي تمزج بين الواقع والخيال.
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link href="/gallery" className="bg-ink text-white px-8 py-3 rounded font-bold hover:bg-gold transition duration-300 shadow-lg">
+              زيارة المعرض
+            </Link>
+            <Link href="/about" className="border-2 border-ink text-ink px-8 py-3 rounded font-bold hover:bg-ink hover:text-white transition duration-300">
+              قصتي
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Featured Section */}
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12 text-ink title-brush">أعمال مميزة</h2>
+        
+        {featuredPaintings.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredPaintings.map((painting) => (
+              <PaintingCard key={painting.id} painting={painting} showStatus={false} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-400 py-12 border-2 border-dashed border-gray-200 rounded-lg">
+            <p>لم يتم تحديد لوحات مميزة بعد.</p>
+            <p className="text-sm mt-2">اذهب للوحة التحكم واختر "عرض في الرئيسية".</p>
+          </div>
+        )}
+        
+      </section>
     </div>
   );
 }
