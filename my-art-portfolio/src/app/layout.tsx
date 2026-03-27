@@ -12,8 +12,8 @@ import { Toaster } from "react-hot-toast";
 const cairo = Cairo({ subsets: ["arabic", "latin"] });
 
 export const metadata: Metadata = {
-  title: "عبد الرحمن ناقشني - معرض فني",
-  description: "معرض أعمال الفنان التشكيلي عبد الرحمن ناقشني، لوحات زيتية فنية للبيع.",
+  title: "عبد الرحمن الفنان - معرض فني",
+  description: "معرض أعمال الفنان التشكيلي عبد الرحمن ، لوحات زيتية فنية للبيع.",
 };
 
 export default function RootLayout({
