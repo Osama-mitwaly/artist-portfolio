@@ -6,8 +6,16 @@ import Modal from '@/components/ui/Modal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import toast from 'react-hot-toast';
 
+interface Post {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  date: string;
+}
+
 export default function AdminBlog() {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -19,14 +27,12 @@ export default function AdminBlog() {
   const fetchPosts = async () => {
     const q = query(collection(db, 'blog'), orderBy('date', 'desc'));
     const snap = await getDocs(q);
-    const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Post));
     setPosts(data);
     setLoading(false);
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+  useEffect(() => { fetchPosts(); }, []);
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,11 +41,14 @@ export default function AdminBlog() {
       toast.success('تم نشر المقال');
       setIsAddOpen(false);
       setForm(emptyForm);
-      fetchPosts(); // تحديث الجدول بدون ريلود
-    } catch (e) { toast.error('خطأ'); }
+      fetchPosts(); 
+    } catch (err) { 
+      console.error(err);
+      toast.error('خطأ'); 
+    }
   };
 
-  const openEdit = (post: any) => {
+  const openEdit = (post: Post) => {
     setEditId(post.id);
     setForm({ title: post.title, content: post.content, imageUrl: post.imageUrl });
     setIsEditOpen(true);
@@ -52,8 +61,11 @@ export default function AdminBlog() {
       await updateDoc(doc(db, 'blog', editId), form);
       toast.success('تم التعديل');
       setIsEditOpen(false);
-      fetchPosts(); // تحديث الجدول بدون ريلود
-    } catch(e) { toast.error('خطأ'); }
+      fetchPosts(); 
+    } catch(err) { 
+      console.error(err);
+      toast.error('خطأ'); 
+    }
   };
 
   const handleDelete = async () => {
@@ -62,8 +74,9 @@ export default function AdminBlog() {
       await deleteDoc(doc(db, 'blog', deleteId));
       toast.success('تم الحذف');
       setDeleteId(null);
-      fetchPosts(); // تحديث الجدول بدون ريلود
-    } catch (e) {
+      fetchPosts(); 
+    } catch (err) {
+      console.error(err);
       toast.error('خطأ');
     }
   };
@@ -105,7 +118,6 @@ export default function AdminBlog() {
         </table>
       </div>
 
-      {/* Add Modal */}
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="مقال جديد">
         <form onSubmit={handleAdd} className="space-y-4">
           <div>
@@ -124,7 +136,6 @@ export default function AdminBlog() {
         </form>
       </Modal>
 
-      {/* Edit Modal */}
       <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} title="تعديل المقال">
         <form onSubmit={handleUpdate} className="space-y-4">
           <div>

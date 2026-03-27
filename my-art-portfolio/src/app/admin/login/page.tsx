@@ -18,7 +18,7 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success('مرحباً بعودتك!');
       router.push('/admin');
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
       toast.error('البريد الإلكتروني أو كلمة المرور غير صحيحة');
     } finally {

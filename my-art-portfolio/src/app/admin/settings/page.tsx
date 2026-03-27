@@ -10,7 +10,8 @@ export default function AdminSettings() {
     bio: '',
     profileImage: '',
     whatsapp: '',
-    telegramValue: '', // اسم المستخدم فقط
+    telegramType: 'username',
+    telegramValue: '',
     facebook: '',
     instagram: '',
     youtube: '',
@@ -29,6 +30,7 @@ export default function AdminSettings() {
           bio: data.bio || '',
           profileImage: data.profileImage || '',
           whatsapp: data.whatsapp || '',
+          telegramType: data.telegramType || 'username',
           telegramValue: data.telegramValue || '',
           facebook: data.facebook || '',
           instagram: data.instagram || '',
@@ -57,7 +59,8 @@ export default function AdminSettings() {
     try {
       await setDoc(doc(db, 'settings', 'config'), form);
       toast.success('تم حفظ الإعدادات وتحديث الموقع بنجاح');
-    } catch (error) {
+    } catch (err) {
+      console.error(err);
       toast.error('حدث خطأ');
     }
   };
@@ -79,12 +82,13 @@ export default function AdminSettings() {
           <h2 className="text-xl font-bold text-ink border-b pb-2 mb-4">بيانات الفنان</h2>
           <div className="grid gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">اسم الفنان (يظهر في الهيدر)</label>
+              <label className="block text-sm font-medium mb-1">اسم الفنان</label>
               <input value={form.artistName} onChange={(e) => handleChange('artistName', e.target.value)} className="w-full p-2 border rounded" />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">رابط الصورة الشخصية</label>
               <input value={form.profileImage} onChange={(e) => handleChange('profileImage', e.target.value)} className="w-full p-2 border rounded" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               {form.profileImage && <img src={form.profileImage} className="w-16 h-16 rounded-full mt-2 object-cover" alt="Profile" />}
             </div>
             <div>
@@ -98,24 +102,21 @@ export default function AdminSettings() {
           <h2 className="text-xl font-bold text-ink border-b pb-2 mb-4">وسائل التواصل</h2>
           <div className="grid gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">واتساب (11 رقم يبدأ بـ 01)</label>
+              <label className="block text-sm font-medium mb-1">واتساب (11 رقم)</label>
               <input value={form.whatsapp} onChange={(e) => handleChange('whatsapp', e.target.value)} className="w-full p-2 border rounded" maxLength={11} />
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-1">معرف التليجرام (Username)</label>
+              <label className="block text-sm font-medium mb-1">معرف التليجرام</label>
               <div className="flex items-center gap-2">
                 <span className="text-gray-400 bg-gray-100 p-2 rounded border">@</span>
                 <input 
                    value={form.telegramValue.replace('@', '')} 
-                   onChange={(e) => handleChange('telegramValue', e.target.value.replace('@', ''))} 
+                   onChange={(e) => handleChange('telegramValue', e.target.value)} 
                    className="w-full p-2 border rounded" 
-                   placeholder="artist_name" 
+                   placeholder="username" 
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1">
-                ملاحظة: التليجرام يدعم فقط أسماء المستخدمين للروابط المباشرة. تأكد من تعيين اسم مستخدم في إعدادات حسابك في التليجرام.
-              </p>
             </div>
           </div>
         </section>

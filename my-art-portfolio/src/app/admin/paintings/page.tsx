@@ -6,8 +6,18 @@ import Modal from '@/components/ui/Modal';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import toast from 'react-hot-toast';
 
+interface Painting {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  isAvailable: boolean;
+  isFeatured: boolean;
+}
+
 export default function AdminPaintings() {
-  const [paintings, setPaintings] = useState<any[]>([]);
+  const [paintings, setPaintings] = useState<Painting[]>([]);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -19,7 +29,7 @@ export default function AdminPaintings() {
 
   const fetchPaintings = async () => {
     const querySnapshot = await getDocs(collection(db, 'paintings'));
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Painting));
     setPaintings(data);
     setLoading(false);
   };
@@ -33,10 +43,13 @@ export default function AdminPaintings() {
       toast.success('تم حذف اللوحة');
       setDeleteId(null);
       fetchPaintings();
-    } catch (e) { toast.error('حدث خطأ'); }
+    } catch (err) { 
+      console.error(err);
+      toast.error('حدث خطأ'); 
+    }
   };
 
-  const openEditModal = (painting: any) => {
+  const openEditModal = (painting: Painting) => {
     setEditId(painting.id);
     setForm({
       title: painting.title || '',
@@ -64,7 +77,10 @@ export default function AdminPaintings() {
       toast.success('تم تحديث اللوحة');
       setIsEditOpen(false);
       fetchPaintings();
-    } catch (e) { toast.error('خطأ في التحديث'); }
+    } catch (err) { 
+      console.error(err);
+      toast.error('خطأ في التحديث'); 
+    }
   };
 
   const handleAdd = async (e: React.FormEvent) => {
@@ -83,7 +99,10 @@ export default function AdminPaintings() {
       setIsAddOpen(false);
       setForm(emptyForm);
       fetchPaintings();
-    } catch (e) { toast.error('خطأ في الإضافة'); }
+    } catch (err) { 
+      console.error(err);
+      toast.error('خطأ في الإضافة'); 
+    }
   };
 
   return (
@@ -111,6 +130,7 @@ export default function AdminPaintings() {
               {paintings.map((p) => (
                 <tr key={p.id}>
                   <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={p.imageUrl} className="w-12 h-12 object-cover rounded" alt="" />
                     <span className="font-medium text-ink">{p.title}</span>
                   </td>
@@ -134,7 +154,6 @@ export default function AdminPaintings() {
         </div>
       )}
 
-      {/* نافذة التعديل */}
       <Modal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} title="تعديل اللوحة">
         <form onSubmit={handleUpdate} className="space-y-4">
           <div>
@@ -154,7 +173,6 @@ export default function AdminPaintings() {
             <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} className="w-full p-2 border rounded" rows={3}></textarea>
           </div>
           
-          {/* قائمة منسدلة للحالة */}
           <div>
             <label className="block text-sm font-medium mb-1">الحالة</label>
             <select value={form.status} onChange={(e) => setForm({...form, status: e.target.value})} className="w-full p-2 border rounded bg-white">
@@ -165,14 +183,13 @@ export default function AdminPaintings() {
 
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={form.isFeatured} onChange={(e) => setForm({...form, isFeatured: e.target.checked})} className="w-4 h-4" />
-            <span className="text-sm">عرض كلوحة مميزة (في الرئيسية)</span>
+            <span className="text-sm">عرض كلوحة مميزة</span>
           </label>
 
           <button type="submit" className="w-full bg-ink text-white py-2 rounded font-bold hover:bg-gold transition">حفظ التعديلات</button>
         </form>
       </Modal>
 
-      {/* نافذة الإضافة */}
       <Modal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} title="إضافة لوحة جديدة">
         <form onSubmit={handleAdd} className="space-y-4">
            <div>

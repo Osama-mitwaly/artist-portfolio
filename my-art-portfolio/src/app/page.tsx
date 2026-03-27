@@ -48,7 +48,7 @@ export default function Home() {
         ) : (
           <div className="text-center text-gray-400 py-12 border-2 border-dashed border-gray-200 rounded-lg">
             <p>لم يتم تحديد لوحات مميزة بعد.</p>
-            <p className="text-sm mt-2">اذهب للوحة التحكم واختر "عرض في الرئيسية".</p>
+            <p className="text-sm mt-2">اذهب للوحة التحكم واختر &quot;عرض في الرئيسية&quot;.</p>
           </div>
         )}
         

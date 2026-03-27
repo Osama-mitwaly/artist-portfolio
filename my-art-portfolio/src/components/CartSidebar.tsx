@@ -1,6 +1,5 @@
 "use client";
 import { useCart } from '@/context/CartContext';
-import { useSettings } from '@/context/SettingsContext';
 
 interface Props {
   onClose: () => void;
@@ -8,7 +7,6 @@ interface Props {
 
 export default function CartSidebar({ onClose }: Props) {
   const { cart, removeFromCart, sendOrder, clearCart } = useCart();
-  const { settings } = useSettings();
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -29,6 +27,7 @@ export default function CartSidebar({ onClose }: Props) {
             cart.map((item) => (
               <div key={item.id} className="flex items-center justify-between bg-white p-3 rounded shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={item.imageUrl} alt={item.title} className="w-12 h-12 object-cover rounded" />
                     <div>
                         <h4 className="font-bold text-ink text-sm">{item.title}</h4>
@@ -48,7 +47,6 @@ export default function CartSidebar({ onClose }: Props) {
           <div className="p-6 border-t border-gold/20 space-y-3 bg-white">
             
             <div className="flex gap-3">
-                {/* زر واتساب */}
                 <button 
                     onClick={() => sendOrder('whatsapp')}
                     className="flex-1 bg-green-600 text-white py-3 rounded font-bold hover:bg-green-700 transition flex items-center justify-center gap-2"
@@ -57,7 +55,6 @@ export default function CartSidebar({ onClose }: Props) {
                     واتساب
                 </button>
 
-                {/* زر تيليجرام */}
                 <button 
                     onClick={() => sendOrder('telegram')}
                     className="flex-1 bg-blue-500 text-white py-3 rounded font-bold hover:bg-blue-600 transition flex items-center justify-center gap-2"
